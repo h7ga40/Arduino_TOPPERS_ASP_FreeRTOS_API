@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+
+!src/cortex-m4/fpv4-sp-d16-hard/libToppersASP_FreeRTOS_API.a
