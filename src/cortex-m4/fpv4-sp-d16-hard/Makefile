@@ -42,9 +42,9 @@ OPTIONS = \
 
 CXXFLAGS = $(OPTIONS) $(INCLUDES) $(DEFINES)
 
-all: libToppersASP_FreeRTOS_API.a
-
 DEPDIR = objs
+
+all: $(DEPDIR) | libToppersASP_FreeRTOS_API.a
 
 $(DEPDIR):
 	@mkdir -p $@

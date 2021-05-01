@@ -10,10 +10,32 @@ extern "C" {
 #endif
 
 #include "FreeRTOSConfig.h"
-#include "projdefs.h"
-#include "portmacro.h"
 
 #define PRIVILEGED_FUNCTION
+
+#define pdFALSE 0
+#define pdTRUE  1
+
+#define pdFAIL 0
+#define pdPASS 1
+
+#define errQUEUE_EMPTY	( ( BaseType_t ) 0 )
+
+typedef long BaseType_t;
+typedef unsigned long UBaseType_t;
+typedef uint32_t StackType_t;
+
+#if( configUSE_16_BIT_TICKS == 1 )
+	typedef uint16_t TickType_t;
+	#define portMAX_DELAY ( TickType_t ) 0xffff
+#else
+	typedef uint32_t TickType_t;
+	#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
+#endif
+#define portTICK_PERIOD_MS			( ( TickType_t ) 1000    / configTICK_RATE_HZ )
+#define portTICK_PERIOD_US			( ( TickType_t ) 1000000 / configTICK_RATE_HZ )
+
+typedef void (*TaskFunction_t)(void*);
 
 typedef struct tskTaskControlBlock* TaskHandle_t;
 typedef struct QueueDefinition* QueueHandle_t;
@@ -36,6 +58,10 @@ void vTaskDelay(const TickType_t xTicksToDelay) PRIVILEGED_FUNCTION;
 TaskHandle_t xTaskGetCurrentTaskHandle(void) PRIVILEGED_FUNCTION;
 void vTaskSuspend(TaskHandle_t xTaskToSuspend) PRIVILEGED_FUNCTION;
 TickType_t xTaskGetTickCount(void) PRIVILEGED_FUNCTION;
+
+void vPortEnterCritical(void) PRIVILEGED_FUNCTION;
+void vPortExitCritical(void) PRIVILEGED_FUNCTION;
+#define portYIELD_FROM_ISR(xSwitchRequired) do{}while(false)
 
 #define taskENTER_CRITICAL()		vPortEnterCritical()
 #define taskEXIT_CRITICAL()			vPortExitCritical()
